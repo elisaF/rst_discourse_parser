@@ -35,7 +35,7 @@ class Preprocesser:
         i = len(raw_sent) / 2
         j = i
         k = i + 1
-        boundaries = [';', ':', '!', '?']
+        boundaries = [';', ':', '!', '?', '.', '-', ')']
         
         results = []
         while j > 0 and k < len(raw_sent) - 1:
@@ -77,7 +77,8 @@ class Preprocesser:
         sentence = Sentence(len(doc.sentences), raw_text + ('<s>' if not end_of_para else '<P>'), doc)
         parse_tree_str, deps_str = self.parse_single_sentence(raw_text)
 
-        parse = LexicalizedTree.parse(parse_tree_str, leaf_pattern = '(?<=\\s)[^\)\(]+')  
+        parse_tree_str = parse_tree_str.decode('utf-8').encode('ascii', 'ignore')
+        parse = LexicalizedTree.fromstring(parse_tree_str, leaf_pattern = '(?<=\\s)[^\)\(]+')  
         sentence.set_unlexicalized_tree(parse)
         
         for (token_id, te) in enumerate(parse.leaves()):
@@ -128,7 +129,8 @@ class Preprocesser:
                     if len(raw_sent.split()) > self.max_sentence_len:
                         chunked_raw_sents = self.heuristic_sentence_splitting(raw_sent)
                         if len(chunked_raw_sents) == 1:
-                            continue
+                            print "Sentence is too long and I can't split it heuristically either."
+                            #continue
                         
                         for (j, sent) in enumerate(chunked_raw_sents):
                             seg_sents.append((sent, i == len(raw_sentences) - 1 and j == len(chunked_raw_sents)))
@@ -141,7 +143,6 @@ class Preprocesser:
         for (i, (raw_text, end_of_para)) in enumerate(seg_sents):
             if i % 10 == 0:
                 print 'Processing sentence %d out of %d' % (i, len(seg_sents))
-    
             self.process_single_sentence(doc, raw_text, end_of_para)
                 
 
