@@ -62,7 +62,7 @@ class Sentence(BaseRepresentation):
 
         ngrams = []
         for i in range(start, end):
-            ngrams.append(self.parse_tree[self.parse_tree.leaf_treeposition(i)[ : -1]].node)
+            ngrams.append(self.parse_tree[self.parse_tree.leaf_treeposition(i)[ : -1]].label())
         
         return ngrams
     
@@ -77,7 +77,6 @@ class Sentence(BaseRepresentation):
     def get_bottom_level_constituents(self):
         constituents = []
         (start_edu, end_edu) = self.doc.cuts[self.sent_id]
-        
         for i in range(start_edu, end_edu):
             c = Constituent(self.doc.edus[i], self.doc,
                             i, i + 1, i + 1, self.sent_id, self.sent_id)

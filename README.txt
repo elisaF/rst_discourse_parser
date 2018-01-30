@@ -30,7 +30,7 @@ You need to install the following third-party software first:
 
 In order to run the software, you need to have the following components:
 1. Python 2.7.
-2. NLTK 2.0b9 (newer versions will not work because of the different interfaces in the tree modules).
+2. NLTK 3.0.0 (I made updates to Vanessa's code to work with the newer NLTK).
 3. Java
 4. gcc
 5. Perl
@@ -43,7 +43,10 @@ SETUP CRFSUITE
 ~~~~~~~~~~~~~~~~~~~~~~
 The $gCRF_ROOT$ symbol in the commands below stands for the root directory of gCRF.
 
-1. Test if the binary file of CRFsuite-stdin is ready for use, by executing the following two commands:
+1. Install working version of NLTK: 
+   pip istall --user nltk=3.0.0
+
+2. Test if the binary file of CRFsuite-stdin is ready for use, by executing the following two commands:
 cd $gCRF_ROOT$/tools/crfsuite/
 crfsuite-stdin tag -pi -m ../../model/tree_build_set_CRF/label/intra.crfsuite test.txt
 
@@ -53,20 +56,26 @@ LEAF:0.063409
 Elaboration[N][S]:0.958434
 LEAF:0.060318
 
-2. If the test in the Step 1 fails, you need to build the binary from source codes. To do so, you need to do the following three things:
-a. Build LibLBFGS
+3. If the test in the Step 1 fails, you need to build the binary from source codes. To do so, you need to do the following three things:
+a. Get LibLBFGS
+   cd $gCRF_ROOT$/tools/crfsuite   
+   curl -L -O https://github.com/downloads/chokkan/liblbfgs/liblbfgs-1.10.tar.gz
+   gunzip liblbfgs-1.10.tar.gz 
+   tar xvf liblbfgs-1.10.tar
+b. Build LibLBFGS
    cd $gCRF_ROOT$/tools/crfsuite/liblbfgs-1.10
    ./configure --prefix=$HOME/local
    make
    make install
 
-b. Build CRFsuite-stdin
+c. Build CRFsuite-stdin
    cd $gCRF_ROOT$/tools/crfsuite/crfsuite-0.12
+   chmod +x configure
    ./configure --prefix=$HOME/local --with-liblbfgs=$HOME/local
    make
    make install
 
-c. Copy the crfsuite binary under $HOME/local/bin to tools/crfsuite and rename it as crfsuite-stdin
+d. Copy the crfsuite binary under $HOME/local/bin to tools/crfsuite and rename it as crfsuite-stdin
    cp $HOME/local/bin/crfsuite $gCRF_ROOT$/tools/crfsuite/crfsuite-stdin
    chmod +x ../crfsuite-stdin
 
