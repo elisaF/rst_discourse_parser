@@ -210,16 +210,16 @@ class DiscourseParser():
     #                print out
                     print 'Finished tree building in %.2f seconds.' % (treeBuildEnd - treeBuildStart)  
                     self.log_writer.write('Finished tree building in %.2f seconds.' % (treeBuildEnd - treeBuildStart))
-                    
-                    for i in range(len(doc.edus)):
-                        pt.__setitem__(pt.leaf_treeposition(i), '_!%s!_' % ' '.join(doc.edus[i]))
-                    
-                    out = pt.pprint()
-                    print 'Output tree building result to %s.' % outfname
-                    f_o = open(outfname, "w")
-                    f_o.write(out)
-                    f_o.close()
-    
+                    if len(doc.edus) > 1:
+                        for i in range(len(doc.edus)):
+                            pt.__setitem__(pt.leaf_treeposition(i), '_!%s!_' % ' '.join(doc.edus[i]))
+                        out = pt.pprint()
+                        print 'Output tree building result to %s.' % outfname
+                        f_o = open(outfname, "w")
+                        f_o.write(out)
+                        f_o.close()
+                    else:
+                        print "One edu, can't build tree. Skipping!!!"
                 
                 if self.save_preprocessed_doc:
                     print 'Saved fully processed document data to %s.' % serialized_doc_filename           
