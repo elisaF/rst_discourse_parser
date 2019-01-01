@@ -44,7 +44,7 @@ SETUP CRFSUITE
 The $gCRF_ROOT$ symbol in the commands below stands for the root directory of gCRF.
 
 1. Install working version of NLTK: 
-   pip istall --user nltk=3.0.0
+   pip install --user nltk==3.0.0
 
 2. Test if the binary file of CRFsuite-stdin is ready for use, by executing the following two commands:
 cd $gCRF_ROOT$/tools/crfsuite/
